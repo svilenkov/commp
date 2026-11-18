@@ -14,8 +14,8 @@ crate-type = ["cdylib", "rlib"]
 wasm-bindgen = { version = "0.2", default-features = false }
 # Scalar SHA-256 (raw `compress256` only) for zero commitments, lone leftover
 # nodes and native builds. On wasm32, +simd128 selects its SIMD message
-# schedule; leaves and tree nodes are hashed 4 at a time by the crate's own
-# `sha256::wasm` module.
+# schedule; leaves and tree nodes are hashed 4 at a time by
+# rust-commp-simd through the `sha256::wasm` module.
 sha2 = { version = "0.11", default-features = false }
 
 # Behind the `parallel` feature: hashes large writes on all cores
@@ -25,6 +25,8 @@ rayon = { version = "1.10", optional = true }
 # Smaller than std's dlmalloc; realloc-in-place is unused and costs size
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 talc = { version = "5.1.1", features = ["disable-realloc-in-place"] }
+# 4-lane SIMD128 SHA-256 for leaves and tree nodes (sha256::wasm)
+rust-commp-simd = { git = "https://github.com/filecoin-project/rust-commp-simd", rev = "69497e963b16ede2b60d3fe9cfd62ece21fc70a5" }
 
 [features]
 # Native only: a `write()` of at least 64 KiB hashes its full batches on

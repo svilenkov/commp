@@ -1,0 +1,21 @@
+[package]
+name = "commp-rust-simd"
+version = "0.0.0"
+edition = "2021"
+publish = false
+description = "compare/rust CLI with rust-commp-simd kernels in place of rs/commp"
+
+[[bin]]
+name = "commp-rust-simd"
+path = "src/main.rs"
+
+[dependencies]
+rust-commp-simd = { git = "https://github.com/filecoin-project/rust-commp-simd", rev = "69497e963b16ede2b60d3fe9cfd62ece21fc70a5" }
+libc = "0.2"
+
+# Same as compare/rust
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true

@@ -129,6 +129,13 @@ const VARIANTS = [
     memory: true,
   },
   {
+    id: 'rust-simd',
+    desc: 'rust-commp-simd kernels: in-place FR32 extrude and multi-level reduce, one thread',
+    impl: 'rust',
+    bin: 'rust-simd',
+    memory: true,
+  },
+  {
     id: 'rust-par',
     desc: 'Rust native with the parallel feature (all cores)',
     impl: 'rust',
@@ -232,6 +239,24 @@ let selected = opts.variants
 /** @type {Record<string, {cmd: string, args: string[], build?: () => void}>} */
 const builds = {
   rust: rustBuild('rust', ''),
+  'rust-simd': {
+    cmd: path.join(BUILD, 'rust-simd', 'release', 'commp-rust-simd'),
+    args: [],
+    build: () =>
+      run(
+        'cargo',
+        [
+          'build',
+          '--quiet',
+          '--release',
+          '--manifest-path',
+          path.join(DIR, 'rust-simd', 'Cargo.toml'),
+          '--target-dir',
+          path.join(BUILD, 'rust-simd'),
+        ],
+        { env: { ...process.env, RUSTFLAGS: '' } }
+      ),
+  },
   'rust-par': rustBuild('rust-par', '', ['parallel']),
   'rust-soft': rustBuild('rust-soft', '--cfg sha2_backend="soft"'),
   'rust-native': rustBuild('rust-native', '-C target-cpu=native'),

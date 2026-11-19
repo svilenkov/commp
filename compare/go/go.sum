@@ -1,9 +1,9 @@
-github.com/filecoin-project/go-fil-commp-hashhash v0.4.0 h1:wmIYOYQmvQHBrilk4qP6UuYrBxH2ojLiBi8eavRjmG8=
-github.com/filecoin-project/go-fil-commp-hashhash v0.4.0/go.mod h1:PH/zp1sbBNSA7vIsrVFB5oxPBoZWGPpd5/emulOAX5s=
 github.com/klauspost/cpuid/v2 v2.2.4 h1:acbojRNwl3o09bUq+yDCtZFc1aiwaAAxtcn8YkZXnvk=
 github.com/klauspost/cpuid/v2 v2.2.4/go.mod h1:RVVoqg1df56z8g3pUjL/3lE5UfnlrJX8tyFgg4nqhuY=
 github.com/minio/sha256-simd v1.0.1 h1:6kaan5IFmwTNynnKKpDHe6FWHohJOHhCPchzK49dzMM=
 github.com/minio/sha256-simd v1.0.1/go.mod h1:Pz6AKMiUdngCLpeTL/RJY1M9rUuPMYujV5xJjtbRSN8=
+github.com/svilenkov/go-fil-commp-hashhash v0.0.0-20261118170028-575243346f65 h1:B0C/u1/Vab+FFpGxQC08rGzmUJ9OB1JUl1S1EWwR1pw=
+github.com/svilenkov/go-fil-commp-hashhash v0.0.0-20261118170028-575243346f65/go.mod h1:b95KrlSthUUHBGXyLFA9vF8TtjS3kBZSlSX+GYRbYho=
 golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0 h1:MVltZSvRTcU2ljQOhs94SXPftV6DCNnZViHeQps87pQ=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

@@ -1,0 +1,2478 @@
+{
+  "version": 2,
+  "label": "neoverse-v2-linux-arm64",
+  "date": "2026-11-19T12:22:41.845Z",
+  "source": {
+    "commit": null,
+    "dirty": null,
+    "changes": null,
+    "id": null
+  },
+  "machine": {
+    "os": "Linux 6.12.74+deb13+1-cloud-arm64",
+    "platform": "linux",
+    "arch": "arm64",
+    "cpu": "Neoverse-V2",
+    "logicalCores": 4,
+    "physicalCores": 4,
+    "memory": 8157650944,
+    "features": {
+      "sha2": true,
+      "sha512": true,
+      "asimd": true,
+      "sve": true,
+      "sve2": true
+    },
+    "virtualized": null,
+    "governor": null,
+    "toolchains": {
+      "go": "go version go1.25.0 linux/arm64",
+      "rustc": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "node": "v24.21.0"
+    }
+  },
+  "config": {
+    "sizes": [
+      33554432,
+      1073741824
+    ],
+    "memSizes": [
+      1048576,
+      1073741824
+    ],
+    "chunk": 1048576,
+    "vectorsMax": 67108864,
+    "sweepCount": 300,
+    "sweepMax": 4194304,
+    "budget": 2147483648
+  },
+  "variants": [
+    {
+      "id": "rust",
+      "desc": "Rust native, SHA-256 hardware detected at run time",
+      "impl": "rust",
+      "backend": "ARMv8 SHA2, 4 messages interleaved",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "rustflags": "",
+      "os": "linux",
+      "arch": "aarch64",
+      "deps": {
+        "commp": "0.1.0",
+        "cpufeatures": "0.3.1",
+        "sha2": "0.11.0"
+      }
+    },
+    {
+      "id": "rust-simd",
+      "desc": "rust-commp-simd kernels: in-place FR32 extrude and multi-level reduce, one thread",
+      "impl": "rust",
+      "backend": "rust-commp-simd: reduce neon_sha256_x4, extrude neon",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "rustflags": "",
+      "os": "linux",
+      "arch": "aarch64",
+      "deps": {
+        "rust-commp-simd": "0.1.0",
+        "sha2": "0.10.9"
+      }
+    },
+    {
+      "id": "rust-par",
+      "desc": "Rust native with the parallel feature (all cores)",
+      "impl": "rust",
+      "backend": "ARMv8 SHA2, 4 messages interleaved, 4 threads",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "rustflags": "",
+      "os": "linux",
+      "arch": "aarch64",
+      "deps": {
+        "commp": "0.1.0",
+        "cpufeatures": "0.3.1",
+        "sha2": "0.11.0"
+      }
+    },
+    {
+      "id": "rust-soft",
+      "desc": "Rust native, SHA extensions off (SIMD lanes only)",
+      "impl": "rust",
+      "backend": "NEON, 8 messages per SHA-256 (2 vectors), forced",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "rustflags": "--cfg sha2_backend='soft'",
+      "os": "linux",
+      "arch": "aarch64",
+      "deps": {
+        "commp": "0.1.0",
+        "cpufeatures": "0.3.1",
+        "sha2": "0.11.0"
+      }
+    },
+    {
+      "id": "go",
+      "desc": "go-fil-commp-hashhash as released (sha256-simd)",
+      "arch": "arm64",
+      "backend": "sha256-simd/ARMv8",
+      "deps": {
+        "github.com/filecoin-project/go-fil-commp-hashhash": "v0.0.0-20261118170028-575243346f65",
+        "github.com/klauspost/cpuid/v2": "v2.2.4",
+        "github.com/minio/sha256-simd": "v1.0.1",
+        "golang.org/x/xerrors": "v0.0.0-20240903120638-7835f813f4da"
+      },
+      "godebug": "",
+      "gomaxprocs": 4,
+      "impl": "go",
+      "numCPU": 4,
+      "os": "linux",
+      "runtime": "go1.25.0"
+    },
+    {
+      "id": "go-1core",
+      "desc": "go-fil-commp-hashhash, GOMAXPROCS=1",
+      "arch": "arm64",
+      "backend": "sha256-simd/ARMv8",
+      "deps": {
+        "github.com/filecoin-project/go-fil-commp-hashhash": "v0.0.0-20261118170028-575243346f65",
+        "github.com/klauspost/cpuid/v2": "v2.2.4",
+        "github.com/minio/sha256-simd": "v1.0.1",
+        "golang.org/x/xerrors": "v0.0.0-20240903120638-7835f813f4da"
+      },
+      "godebug": "",
+      "gomaxprocs": 1,
+      "impl": "go",
+      "numCPU": 4,
+      "os": "linux",
+      "runtime": "go1.25.0"
+    },
+    {
+      "id": "go-stdlib",
+      "desc": "go-fil-commp-hashhash on crypto/sha256",
+      "arch": "arm64",
+      "backend": "crypto/sha256/ARMv8",
+      "deps": {
+        "github.com/filecoin-project/go-fil-commp-hashhash": "v0.4.0",
+        "github.com/klauspost/cpuid/v2": "v2.2.4",
+        "github.com/minio/sha256-simd": "=> ./sha256stdlib",
+        "golang.org/x/xerrors": "v0.0.0-20240903120638-7835f813f4da"
+      },
+      "godebug": "",
+      "gomaxprocs": 4,
+      "impl": "go",
+      "numCPU": 4,
+      "os": "linux",
+      "runtime": "go1.25.0"
+    },
+    {
+      "id": "go-nosha",
+      "desc": "go-fil-commp-hashhash on crypto/sha256, GODEBUG=cpu.sha2=off",
+      "arch": "arm64",
+      "backend": "crypto/sha256/generic",
+      "deps": {
+        "github.com/filecoin-project/go-fil-commp-hashhash": "v0.4.0",
+        "github.com/klauspost/cpuid/v2": "v2.2.4",
+        "github.com/minio/sha256-simd": "=> ./sha256stdlib",
+        "golang.org/x/xerrors": "v0.0.0-20240903120638-7835f813f4da"
+      },
+      "godebug": "cpu.sha2=off",
+      "gomaxprocs": 4,
+      "impl": "go",
+      "numCPU": 4,
+      "os": "linux",
+      "runtime": "go1.25.0"
+    },
+    {
+      "id": "go-nosha-1core",
+      "desc": "go-fil-commp-hashhash on crypto/sha256, GODEBUG=cpu.sha2=off, GOMAXPROCS=1",
+      "arch": "arm64",
+      "backend": "crypto/sha256/generic",
+      "deps": {
+        "github.com/filecoin-project/go-fil-commp-hashhash": "v0.4.0",
+        "github.com/klauspost/cpuid/v2": "v2.2.4",
+        "github.com/minio/sha256-simd": "=> ./sha256stdlib",
+        "golang.org/x/xerrors": "v0.0.0-20240903120638-7835f813f4da"
+      },
+      "godebug": "cpu.sha2=off",
+      "gomaxprocs": 1,
+      "impl": "go",
+      "numCPU": 4,
+      "os": "linux",
+      "runtime": "go1.25.0"
+    },
+    {
+      "id": "wasm",
+      "desc": "@hugomrdias/commp-wasm (committed inline build) in Node",
+      "impl": "wasm",
+      "backend": "wasm simd128, 4 messages per SHA-256",
+      "runtime": "node v24.21.0 (V8 13.6.233.17-node.53)",
+      "os": "linux",
+      "arch": "arm64",
+      "deps": {
+        "@hugomrdias/commp-wasm": "0.1.4",
+        "inline wasm sha256": "15f91babb6c2cbc6"
+      }
+    }
+  ],
+  "verify": {
+    "variants": [
+      "rust",
+      "rust-simd",
+      "rust-par",
+      "rust-soft",
+      "go",
+      "go-stdlib",
+      "go-nosha",
+      "wasm"
+    ],
+    "vectors": {
+      "max": 67108864,
+      "checked": 1072,
+      "skipped": 45,
+      "failures": []
+    },
+    "sweep": {
+      "max": 4194304,
+      "checked": 300,
+      "failures": []
+    }
+  },
+  "bench": [
+    {
+      "variant": "rust",
+      "backend": "ARMv8 SHA2, 4 messages interleaved",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 770.7253928908169,
+      "cores": 1.000052960201479,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 18362368,
+      "rssPeak": 18493440,
+      "allocBytes": 16432,
+      "allocs": 2,
+      "runs": [
+        {
+          "wall": 0.041534926,
+          "user": 0.041542,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041506659,
+          "user": 0.041509000000000004,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041533849,
+          "user": 0.04153699999999999,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.04157348,
+          "user": 0.041575,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041570826,
+          "user": 0.041573,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.04155725,
+          "user": 0.041560000000000014,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.04153671,
+          "user": 0.04152899999999998,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.04153064,
+          "user": 0.04153300000000004,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041430221,
+          "user": 0.04143199999999997,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041452712,
+          "user": 0.041454999999999964,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041536151,
+          "user": 0.04153800000000002,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041397996,
+          "user": 0.04140100000000002,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041402982,
+          "user": 0.041405000000000025,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041386486,
+          "user": 0.04138799999999998,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041564198,
+          "user": 0.041557999999999984,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.04158577,
+          "user": 0.04158799999999996,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041508015,
+          "user": 0.04151000000000005,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.04149816,
+          "user": 0.04150100000000001,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041475149,
+          "user": 0.041476999999999986,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.041431126,
+          "user": 0.04143400000000008,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        }
+      ]
+    },
+    {
+      "variant": "rust-simd",
+      "backend": "rust-commp-simd: reduce neon_sha256_x4, extrude neon",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 854.0338688481538,
+      "cores": 1.0000634753862219,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 18624512,
+      "rssPeak": 18624512,
+      "allocBytes": 131584,
+      "allocs": 1,
+      "runs": [
+        {
+          "wall": 0.037519109,
+          "user": 0.037512000000000004,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037487218,
+          "user": 0.037489,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037430021,
+          "user": 0.03743199999999999,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.03743117,
+          "user": 0.037432999999999994,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037475873,
+          "user": 0.03747800000000001,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037463441,
+          "user": 0.037466,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037475039,
+          "user": 0.03747699999999998,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037433432,
+          "user": 0.037436000000000025,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037427366,
+          "user": 0.03742999999999996,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037407416,
+          "user": 0.03741,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037427711,
+          "user": 0.03743000000000002,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037408492,
+          "user": 0.03741,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037437644,
+          "user": 0.03744000000000003,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037436027,
+          "user": 0.037439,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037476457,
+          "user": 0.03747899999999993,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.03751902,
+          "user": 0.037521999999999944,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037561556,
+          "user": 0.03756399999999993,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.0374886,
+          "user": 0.03749099999999994,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037509425,
+          "user": 0.03751199999999999,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 0.037534943,
+          "user": 0.03753700000000004,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        }
+      ]
+    },
+    {
+      "variant": "rust-par",
+      "backend": "ARMv8 SHA2, 4 messages interleaved, 4 threads",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 2802.728631493298,
+      "cores": 3.816484858216139,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 19075072,
+      "rssPeak": 19599360,
+      "allocBytes": 17952,
+      "allocs": 3,
+      "runs": [
+        {
+          "wall": 0.011450283,
+          "user": 0.043697,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011411578,
+          "user": 0.035484,
+          "sys": 0.008095,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011438319,
+          "user": 0.03999799999999999,
+          "sys": 0.003658999999999999,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011442547,
+          "user": 0.04361999999999999,
+          "sys": 0,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011425184,
+          "user": 0.04355800000000001,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011466147,
+          "user": 0.04363900000000001,
+          "sys": 0,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011479474,
+          "user": 0.043704999999999994,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011393088,
+          "user": 0.04315199999999997,
+          "sys": 0.00034,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011359068,
+          "user": 0.039590000000000014,
+          "sys": 0.003839999999999998,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011412055,
+          "user": 0.04357899999999998,
+          "sys": 0,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011425175,
+          "user": 0.04353499999999999,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011409467,
+          "user": 0.04350000000000004,
+          "sys": 0,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011354277,
+          "user": 0.03989100000000001,
+          "sys": 0.003544000000000002,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011351536,
+          "user": 0.04341100000000009,
+          "sys": 0,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011348732,
+          "user": 0.04313600000000006,
+          "sys": 0.00026199999999999835,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011332749,
+          "user": 0.03952800000000001,
+          "sys": 0.0038150000000000024,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011422835,
+          "user": 0.04352,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.011601994,
+          "user": 0.04352800000000001,
+          "sys": 0,
+          "allocBytes": 17952,
+          "allocs": 3
+        },
+        {
+          "wall": 0.011364682,
+          "user": 0.043458,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.01385153,
+          "user": 0.04376200000000008,
+          "sys": 0.0002579999999999978,
+          "allocBytes": 17952,
+          "allocs": 3
+        }
+      ]
+    },
+    {
+      "variant": "rust-soft",
+      "backend": "NEON, 8 messages per SHA-256 (2 vectors), forced",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 203.12162776442108,
+      "cores": 1.0000376451294195,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 18374656,
+      "rssPeak": 18374656,
+      "allocBytes": 16432,
+      "allocs": 2,
+      "runs": [
+        {
+          "wall": 0.157993546,
+          "user": 0.15800499999999998,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157787084,
+          "user": 0.15779400000000002,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157594933,
+          "user": 0.157601,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157498048,
+          "user": 0.1575040000000001,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157542961,
+          "user": 0.15753899999999998,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157532151,
+          "user": 0.15753899999999998,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157557154,
+          "user": 0.157563,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157503196,
+          "user": 0.15750900000000012,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.15742802,
+          "user": 0.15743399999999985,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157539193,
+          "user": 0.15754600000000019,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157406342,
+          "user": 0.15741300000000003,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157573854,
+          "user": 0.15757100000000013,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157568933,
+          "user": 0.15757200000000005,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157471091,
+          "user": 0.1574770000000001,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157470053,
+          "user": 0.15747599999999995,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.15758945,
+          "user": 0.1575949999999997,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.15746017,
+          "user": 0.15746700000000002,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157563395,
+          "user": 0.15756300000000012,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157455349,
+          "user": 0.15746100000000007,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 0.157545292,
+          "user": 0.15755099999999977,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        }
+      ]
+    },
+    {
+      "variant": "go",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 1748.4700682004411,
+      "cores": 2.4091458902677085,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 32018432,
+      "rssPeak": 44896256,
+      "allocBytes": 42345976,
+      "allocs": 1211,
+      "runs": [
+        {
+          "wall": 0.018218601,
+          "user": 0.043723,
+          "sys": 0.0001730000000000004,
+          "allocBytes": 42345560,
+          "allocs": 1202
+        },
+        {
+          "wall": 0.018282105,
+          "user": 0.043343000000000007,
+          "sys": 0.00033799999999999976,
+          "allocBytes": 42351320,
+          "allocs": 1226
+        },
+        {
+          "wall": 0.018227347,
+          "user": 0.043972,
+          "sys": 0.00004200000000000037,
+          "allocBytes": 42343368,
+          "allocs": 1194
+        },
+        {
+          "wall": 0.018316972,
+          "user": 0.044120999999999994,
+          "sys": 0.0001269999999999995,
+          "allocBytes": 42347128,
+          "allocs": 1208
+        },
+        {
+          "wall": 0.018311962,
+          "user": 0.04391299999999998,
+          "sys": 0,
+          "allocBytes": 42345608,
+          "allocs": 1199
+        },
+        {
+          "wall": 0.018477269,
+          "user": 0.039674000000000015,
+          "sys": 0.004135,
+          "allocBytes": 42355432,
+          "allocs": 1226
+        },
+        {
+          "wall": 0.018404815,
+          "user": 0.043935,
+          "sys": 0.00003100000000000151,
+          "allocBytes": 42350280,
+          "allocs": 1222
+        },
+        {
+          "wall": 0.018180544,
+          "user": 0.043709,
+          "sys": 0.00022799999999999904,
+          "allocBytes": 42349640,
+          "allocs": 1219
+        },
+        {
+          "wall": 0.018403002,
+          "user": 0.04437300000000005,
+          "sys": 0.00010299999999999893,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.018252283,
+          "user": 0.043906,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.018207634,
+          "user": 0.04395600000000005,
+          "sys": 0,
+          "allocBytes": 42346184,
+          "allocs": 1205
+        },
+        {
+          "wall": 0.018276642,
+          "user": 0.043864000000000014,
+          "sys": 0,
+          "allocBytes": 42344968,
+          "allocs": 1196
+        },
+        {
+          "wall": 0.018395073,
+          "user": 0.044313999999999965,
+          "sys": 0,
+          "allocBytes": 42343816,
+          "allocs": 1195
+        },
+        {
+          "wall": 0.018291467,
+          "user": 0.04410000000000003,
+          "sys": 0,
+          "allocBytes": 42342824,
+          "allocs": 1192
+        },
+        {
+          "wall": 0.018362523,
+          "user": 0.04497099999999998,
+          "sys": 0,
+          "allocBytes": 42341752,
+          "allocs": 1189
+        },
+        {
+          "wall": 0.01849496,
+          "user": 0.04414600000000002,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.01846035,
+          "user": 0.040466,
+          "sys": 0.0036760000000000004,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.018203024,
+          "user": 0.043856000000000006,
+          "sys": 0,
+          "allocBytes": 42342408,
+          "allocs": 1195
+        },
+        {
+          "wall": 0.018357659,
+          "user": 0.04422399999999993,
+          "sys": 0,
+          "allocBytes": 42343272,
+          "allocs": 1204
+        },
+        {
+          "wall": 0.018231162,
+          "user": 0.04107000000000005,
+          "sys": 0.0038740000000000007,
+          "allocBytes": 42345976,
+          "allocs": 1211
+        }
+      ]
+    },
+    {
+      "variant": "go-1core",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 768.1867738594492,
+      "cores": 1.0003413335997615,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 31969280,
+      "rssPeak": 63860736,
+      "allocBytes": 42341736,
+      "allocs": 1188,
+      "runs": [
+        {
+          "wall": 0.041340976,
+          "user": 0.040417,
+          "sys": 0.0009379999999999996,
+          "allocBytes": 42343912,
+          "allocs": 1196
+        },
+        {
+          "wall": 0.041500747,
+          "user": 0.041315,
+          "sys": 0.00019999999999999966,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041768846,
+          "user": 0.041781,
+          "sys": 0,
+          "allocBytes": 42341752,
+          "allocs": 1189
+        },
+        {
+          "wall": 0.041524023,
+          "user": 0.04153900000000002,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041696015,
+          "user": 0.041662000000000005,
+          "sys": 0.000034999999999998574,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.042717589,
+          "user": 0.042733999999999994,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041456115,
+          "user": 0.04147000000000001,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041939932,
+          "user": 0.04195599999999999,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.04167853,
+          "user": 0.04169200000000001,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.042655556,
+          "user": 0.04267000000000004,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041335438,
+          "user": 0.04134899999999997,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041634542,
+          "user": 0.041650999999999994,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041890549,
+          "user": 0.04190500000000008,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041457048,
+          "user": 0.041471000000000036,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041485608,
+          "user": 0.04149999999999998,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.04148997,
+          "user": 0.041505000000000014,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041461337,
+          "user": 0.04147599999999996,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.041999963,
+          "user": 0.042013999999999996,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.042016416,
+          "user": 0.04203299999999999,
+          "sys": 0,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.04295756,
+          "user": 0.03904399999999997,
+          "sys": 0.003928000000000001,
+          "allocBytes": 42341736,
+          "allocs": 1188
+        }
+      ]
+    },
+    {
+      "variant": "go-stdlib",
+      "backend": "crypto/sha256/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 573.2357431725094,
+      "cores": 2.3892773194178765,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 29941760,
+      "rssPeak": 42835968,
+      "allocBytes": 33884680,
+      "allocs": 1210,
+      "runs": [
+        {
+          "wall": 0.055781948,
+          "user": 0.12978299999999998,
+          "sys": 0.00371,
+          "allocBytes": 33884904,
+          "allocs": 1209
+        },
+        {
+          "wall": 0.055556683,
+          "user": 0.13259200000000002,
+          "sys": 0.00027899999999999973,
+          "allocBytes": 33886024,
+          "allocs": 1213
+        },
+        {
+          "wall": 0.056757776,
+          "user": 0.130473,
+          "sys": 0.004117000000000001,
+          "allocBytes": 33886760,
+          "allocs": 1217
+        },
+        {
+          "wall": 0.055888453,
+          "user": 0.12972599999999995,
+          "sys": 0.0038810000000000008,
+          "allocBytes": 33888456,
+          "allocs": 1220
+        },
+        {
+          "wall": 0.05598988,
+          "user": 0.12922299999999998,
+          "sys": 0.004215000000000002,
+          "allocBytes": 33885480,
+          "allocs": 1211
+        },
+        {
+          "wall": 0.055833946,
+          "user": 0.133394,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.055999027,
+          "user": 0.13346900000000006,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.055767168,
+          "user": 0.13325200000000004,
+          "sys": 0,
+          "allocBytes": 33882472,
+          "allocs": 1198
+        },
+        {
+          "wall": 0.056858286,
+          "user": 0.13121199999999988,
+          "sys": 0.0032259999999999997,
+          "allocBytes": 33886920,
+          "allocs": 1215
+        },
+        {
+          "wall": 0.055805591,
+          "user": 0.13336100000000006,
+          "sys": 0.00018600000000000214,
+          "allocBytes": 33887656,
+          "allocs": 1219
+        },
+        {
+          "wall": 0.055933361,
+          "user": 0.1335449999999998,
+          "sys": 0.000053999999999998494,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.055555972,
+          "user": 0.13251599999999986,
+          "sys": 0.00012799999999999964,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.055825955,
+          "user": 0.13324599999999998,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.055683166,
+          "user": 0.133289,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.056970189,
+          "user": 0.13452600000000015,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.055768079,
+          "user": 0.12967200000000023,
+          "sys": 0.00366,
+          "allocBytes": 33885928,
+          "allocs": 1212
+        },
+        {
+          "wall": 0.055820956,
+          "user": 0.133413,
+          "sys": 0.00008499999999999827,
+          "allocBytes": 33881480,
+          "allocs": 1206
+        },
+        {
+          "wall": 0.05574531,
+          "user": 0.13317099999999993,
+          "sys": 0.00018900000000000167,
+          "allocBytes": 33881480,
+          "allocs": 1206
+        },
+        {
+          "wall": 0.055819667,
+          "user": 0.13339799999999968,
+          "sys": 0,
+          "allocBytes": 33880936,
+          "allocs": 1193
+        },
+        {
+          "wall": 0.055858775,
+          "user": 0.13334000000000001,
+          "sys": 0.000015000000000001124,
+          "allocBytes": 33884680,
+          "allocs": 1210
+        }
+      ]
+    },
+    {
+      "variant": "go-nosha",
+      "backend": "crypto/sha256/generic",
+      "runtime": "go1.25.0",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 91.99053807748028,
+      "cores": 2.143341820514361,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 31916032,
+      "rssPeak": 40706048,
+      "allocBytes": 33884968,
+      "allocs": 1213,
+      "runs": [
+        {
+          "wall": 0.348519538,
+          "user": 0.7289990000000001,
+          "sys": 0.016238,
+          "allocBytes": 33891384,
+          "allocs": 1232
+        },
+        {
+          "wall": 0.34769777,
+          "user": 0.7407750000000001,
+          "sys": 0.004177,
+          "allocBytes": 33887320,
+          "allocs": 1216
+        },
+        {
+          "wall": 0.348048354,
+          "user": 0.733595,
+          "sys": 0.012364999999999998,
+          "allocBytes": 33881896,
+          "allocs": 1192
+        },
+        {
+          "wall": 0.347761344,
+          "user": 0.7414579999999997,
+          "sys": 0.0039039999999999977,
+          "allocBytes": 33886424,
+          "allocs": 1214
+        },
+        {
+          "wall": 0.348129371,
+          "user": 0.7380749999999998,
+          "sys": 0.008039000000000004,
+          "allocBytes": 33886472,
+          "allocs": 1214
+        },
+        {
+          "wall": 0.347953154,
+          "user": 0.7381919999999997,
+          "sys": 0.007835000000000002,
+          "allocBytes": 33886376,
+          "allocs": 1213
+        },
+        {
+          "wall": 0.349741572,
+          "user": 0.7379259999999999,
+          "sys": 0.00789999999999999,
+          "allocBytes": 33880392,
+          "allocs": 1191
+        },
+        {
+          "wall": 0.347725016,
+          "user": 0.7370990000000006,
+          "sys": 0.008204000000000003,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.347775189,
+          "user": 0.7377140000000004,
+          "sys": 0.007905999999999996,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.347908721,
+          "user": 0.7340059999999999,
+          "sys": 0.012104000000000004,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.347779668,
+          "user": 0.7333810000000005,
+          "sys": 0.011936000000000002,
+          "allocBytes": 33881512,
+          "allocs": 1199
+        },
+        {
+          "wall": 0.347832183,
+          "user": 0.7289209999999997,
+          "sys": 0.015839000000000006,
+          "allocBytes": 33885832,
+          "allocs": 1211
+        },
+        {
+          "wall": 0.347791089,
+          "user": 0.7336910000000003,
+          "sys": 0.01203399999999999,
+          "allocBytes": 33880488,
+          "allocs": 1192
+        },
+        {
+          "wall": 0.347988422,
+          "user": 0.7378309999999999,
+          "sys": 0.008235999999999993,
+          "allocBytes": 33879848,
+          "allocs": 1189
+        },
+        {
+          "wall": 0.347800273,
+          "user": 0.732939,
+          "sys": 0.012195000000000011,
+          "allocBytes": 33881192,
+          "allocs": 1203
+        },
+        {
+          "wall": 0.347891544,
+          "user": 0.7290109999999999,
+          "sys": 0.016055999999999987,
+          "allocBytes": 33881096,
+          "allocs": 1202
+        },
+        {
+          "wall": 0.347806152,
+          "user": 0.734121,
+          "sys": 0.011923000000000017,
+          "allocBytes": 33880040,
+          "allocs": 1191
+        },
+        {
+          "wall": 0.353645786,
+          "user": 0.7547499999999996,
+          "sys": 0.01186899999999999,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.347650399,
+          "user": 0.7339200000000012,
+          "sys": 0.011737999999999998,
+          "allocBytes": 33880040,
+          "allocs": 1191
+        },
+        {
+          "wall": 0.347938595,
+          "user": 0.7298910000000003,
+          "sys": 0.015987,
+          "allocBytes": 33884968,
+          "allocs": 1213
+        }
+      ]
+    },
+    {
+      "variant": "go-nosha-1core",
+      "backend": "crypto/sha256/generic",
+      "runtime": "go1.25.0",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 45.29116596890518,
+      "cores": 1.0002734177380601,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 29921280,
+      "rssPeak": 44990464,
+      "allocBytes": 33879752,
+      "allocs": 1188,
+      "runs": [
+        {
+          "wall": 0.706326558,
+          "user": 0.702545,
+          "sys": 0.003991,
+          "allocBytes": 33880840,
+          "allocs": 1192
+        },
+        {
+          "wall": 0.707005428,
+          "user": 0.707112,
+          "sys": 0.000010999999999999725,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.708824652,
+          "user": 0.7088939999999999,
+          "sys": 0,
+          "allocBytes": 33880296,
+          "allocs": 1190
+        },
+        {
+          "wall": 0.707974459,
+          "user": 0.7081729999999999,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706522089,
+          "user": 0.7066579999999996,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706381588,
+          "user": 0.7065199999999994,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706454745,
+          "user": 0.7066029999999994,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706429466,
+          "user": 0.7066160000000004,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.70785299,
+          "user": 0.7080109999999991,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.70655701,
+          "user": 0.7067189999999997,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706483345,
+          "user": 0.7066850000000002,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706366673,
+          "user": 0.7065429999999999,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706473243,
+          "user": 0.7026820000000011,
+          "sys": 0.0039959999999999996,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.70679179,
+          "user": 0.7069910000000004,
+          "sys": 0.0000030000000000012655,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.707750935,
+          "user": 0.7079419999999992,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706407865,
+          "user": 0.7066130000000008,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706236461,
+          "user": 0.7064319999999995,
+          "sys": 0,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.70656871,
+          "user": 0.7067890000000006,
+          "sys": 0,
+          "allocBytes": 33879768,
+          "allocs": 1189
+        },
+        {
+          "wall": 0.706895049,
+          "user": 0.7031010000000002,
+          "sys": 0.003998999999999999,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        },
+        {
+          "wall": 0.706693534,
+          "user": 0.7069019999999995,
+          "sys": 0.0000020000000000002655,
+          "allocBytes": 33879752,
+          "allocs": 1188
+        }
+      ]
+    },
+    {
+      "variant": "wasm",
+      "backend": "wasm simd128, 4 messages per SHA-256",
+      "runtime": "node v24.21.0 (V8 13.6.233.17-node.53)",
+      "size": 33554432,
+      "iters": 20,
+      "mibps": 118.86717884701497,
+      "cores": 1.0000575563056877,
+      "root": "9ff89403c956e166d75571ed43a74c289ea5c2c9193e8156638934fd67b6ce33",
+      "padded": 67108864,
+      "rssBase": 77099008,
+      "rssPeak": 78163968,
+      "allocBytes": null,
+      "allocs": null,
+      "runs": [
+        {
+          "wall": 0.269562871,
+          "user": 0.271404,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269210268,
+          "user": 0.269227,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269258142,
+          "user": 0.269268,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269195764,
+          "user": 0.269211,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.26918257,
+          "user": 0.269201,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269136529,
+          "user": 0.269154,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269205808,
+          "user": 0.269215,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269372531,
+          "user": 0.269748,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269222076,
+          "user": 0.269318,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269127207,
+          "user": 0.269136,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269219603,
+          "user": 0.269231,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269267854,
+          "user": 0.26962,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269140485,
+          "user": 0.269156,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269117005,
+          "user": 0.269125,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269372495,
+          "user": 0.269388,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269358629,
+          "user": 0.270223,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269091513,
+          "user": 0.269107,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.270209489,
+          "user": 0.270219,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.26915562,
+          "user": 0.269171,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 0.269142191,
+          "user": 0.26915,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        }
+      ]
+    },
+    {
+      "variant": "rust",
+      "backend": "ARMv8 SHA2, 4 messages interleaved",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 769.0232242355182,
+      "cores": 1.0000218149432505,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 18284544,
+      "rssPeak": 18415616,
+      "allocBytes": 16432,
+      "allocs": 2,
+      "runs": [
+        {
+          "wall": 1.3338504869999999,
+          "user": 1.333854,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 1.331380956,
+          "user": 1.33141,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 1.331559266,
+          "user": 1.331591,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        }
+      ]
+    },
+    {
+      "variant": "rust-simd",
+      "backend": "rust-commp-simd: reduce neon_sha256_x4, extrude neon",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 858.7131065423381,
+      "cores": 1.0000186581031514,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 18550784,
+      "rssPeak": 18550784,
+      "allocBytes": 131584,
+      "allocs": 1,
+      "runs": [
+        {
+          "wall": 1.19248209,
+          "user": 1.192446,
+          "sys": 0.00006600000000000009,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 1.192725746,
+          "user": 1.1927470000000002,
+          "sys": 0.0000010000000000001327,
+          "allocBytes": 131584,
+          "allocs": 1
+        },
+        {
+          "wall": 1.192276372,
+          "user": 1.1922880000000005,
+          "sys": 0,
+          "allocBytes": 131584,
+          "allocs": 1
+        }
+      ]
+    },
+    {
+      "variant": "rust-par",
+      "backend": "ARMv8 SHA2, 4 messages interleaved, 4 threads",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 2731.5964146751367,
+      "cores": 3.7059227108345754,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 19271680,
+      "rssPeak": 19533824,
+      "allocBytes": 40752,
+      "allocs": 18,
+      "runs": [
+        {
+          "wall": 0.365365558,
+          "user": 1.341208,
+          "sys": 0.047142,
+          "allocBytes": 40752,
+          "allocs": 18
+        },
+        {
+          "wall": 0.38350241,
+          "user": 1.346524,
+          "sys": 0.044783,
+          "allocBytes": 40752,
+          "allocs": 18
+        },
+        {
+          "wall": 0.374872362,
+          "user": 1.3413410000000003,
+          "sys": 0.047907000000000005,
+          "allocBytes": 40752,
+          "allocs": 18
+        }
+      ]
+    },
+    {
+      "variant": "rust-soft",
+      "backend": "NEON, 8 messages per SHA-256 (2 vectors), forced",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 203.05575617149196,
+      "cores": 1.0000206478356126,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 18440192,
+      "rssPeak": 18440192,
+      "allocBytes": 16432,
+      "allocs": 2,
+      "runs": [
+        {
+          "wall": 5.042949874,
+          "user": 5.043054000000001,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 5.044394257,
+          "user": 5.044491,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        },
+        {
+          "wall": 5.041652667,
+          "user": 5.041760999999999,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        }
+      ]
+    },
+    {
+      "variant": "go",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 1767.2739055473764,
+      "cores": 2.422849562117492,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 32067584,
+      "rssPeak": 49344512,
+      "allocBytes": 1352825904,
+      "allocs": 33220,
+      "runs": [
+        {
+          "wall": 0.579423482,
+          "user": 1.392139,
+          "sys": 0.012127,
+          "allocBytes": 1352841712,
+          "allocs": 33281
+        },
+        {
+          "wall": 0.579913643,
+          "user": 1.399731,
+          "sys": 0.004213,
+          "allocBytes": 1352824848,
+          "allocs": 33228
+        },
+        {
+          "wall": 0.57915193,
+          "user": 1.3787850000000001,
+          "sys": 0.024412999999999997,
+          "allocBytes": 1352825904,
+          "allocs": 33220
+        }
+      ]
+    },
+    {
+      "variant": "go-1core",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 761.5239495017139,
+      "cores": 1.0002686130633782,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 31965184,
+      "rssPeak": 68079616,
+      "allocBytes": 1352820400,
+      "allocs": 33200,
+      "runs": [
+        {
+          "wall": 1.344672089,
+          "user": 1.3159560000000001,
+          "sys": 0.029079999999999998,
+          "allocBytes": 1352825312,
+          "allocs": 33219
+        },
+        {
+          "wall": 1.355084788,
+          "user": 1.3314530000000002,
+          "sys": 0.023995000000000002,
+          "allocBytes": 1352820400,
+          "allocs": 33200
+        },
+        {
+          "wall": 1.341144751,
+          "user": 1.329469,
+          "sys": 0.012035999999999991,
+          "allocBytes": 1352820400,
+          "allocs": 33200
+        }
+      ]
+    },
+    {
+      "variant": "go-stdlib",
+      "backend": "crypto/sha256/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 575.9077320585295,
+      "cores": 2.3981875707052596,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 29876224,
+      "rssPeak": 42741760,
+      "allocBytes": 1082275952,
+      "allocs": 33248,
+      "runs": [
+        {
+          "wall": 1.778062601,
+          "user": 4.21019,
+          "sys": 0.052039,
+          "allocBytes": 1082272768,
+          "allocs": 33254
+        },
+        {
+          "wall": 1.777099945,
+          "user": 4.231738,
+          "sys": 0.030080999999999997,
+          "allocBytes": 1082276592,
+          "allocs": 33273
+        },
+        {
+          "wall": 1.778176499,
+          "user": 4.245677000000001,
+          "sys": 0.020398,
+          "allocBytes": 1082275952,
+          "allocs": 33248
+        }
+      ]
+    },
+    {
+      "variant": "go-nosha",
+      "backend": "crypto/sha256/generic",
+      "runtime": "go1.25.0",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 92.11621829079122,
+      "cores": 2.1452197056052444,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 29888512,
+      "rssPeak": 40628224,
+      "allocBytes": 1082274064,
+      "allocs": 33243,
+      "runs": [
+        {
+          "wall": 11.116392086,
+          "user": 23.61434,
+          "sys": 0.345025,
+          "allocBytes": 1082274160,
+          "allocs": 33258
+        },
+        {
+          "wall": 11.115587408,
+          "user": 23.399796,
+          "sys": 0.44415,
+          "allocBytes": 1082275392,
+          "allocs": 33260
+        },
+        {
+          "wall": 11.117881277,
+          "user": 23.528093,
+          "sys": 0.32220499999999996,
+          "allocBytes": 1082274064,
+          "allocs": 33243
+        }
+      ]
+    },
+    {
+      "variant": "go-nosha-1core",
+      "backend": "crypto/sha256/generic",
+      "runtime": "go1.25.0",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 45.28138984389343,
+      "cores": 1.0002998901344697,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 29917184,
+      "rssPeak": 47071232,
+      "allocBytes": 1082263648,
+      "allocs": 33200,
+      "runs": [
+        {
+          "wall": 22.610949643,
+          "user": 22.609632,
+          "sys": 0.008001,
+          "allocBytes": 1082268528,
+          "allocs": 33218
+        },
+        {
+          "wall": 22.614932005,
+          "user": 22.621713000000003,
+          "sys": 0.000001000000000001,
+          "allocBytes": 1082263648,
+          "allocs": 33200
+        },
+        {
+          "wall": 22.614146861000002,
+          "user": 22.612966000000007,
+          "sys": 0.008001,
+          "allocBytes": 1082263648,
+          "allocs": 33200
+        }
+      ]
+    },
+    {
+      "variant": "wasm",
+      "backend": "wasm simd128, 4 messages per SHA-256",
+      "runtime": "node v24.21.0 (V8 13.6.233.17-node.53)",
+      "size": 1073741824,
+      "iters": 3,
+      "mibps": 118.88117836311254,
+      "cores": 1.0000460027205151,
+      "root": "f475b9bdde526055bc91c013a8d19b5a972053a36f0f28bea7bc1525e827661a",
+      "padded": 2147483648,
+      "rssBase": 77008896,
+      "rssPeak": 78999552,
+      "allocBytes": null,
+      "allocs": null,
+      "runs": [
+        {
+          "wall": 8.616003266,
+          "user": 8.624674,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 8.61200184,
+          "user": 8.612123,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        },
+        {
+          "wall": 8.613642749,
+          "user": 8.614039,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        }
+      ]
+    }
+  ],
+  "memory": [
+    {
+      "variant": "rust",
+      "backend": "ARMv8 SHA2, 4 messages interleaved",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1048576,
+      "iters": 1,
+      "mibps": 780.7364218225199,
+      "cores": 1.001684829198293,
+      "root": "405feeccc1e2ebb49d4fa83367c71a32bd7cd011f0f77184efc2cd2ef1361a23",
+      "padded": 2097152,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 16432,
+      "allocs": 2,
+      "runs": [
+        {
+          "wall": 0.001280842,
+          "user": 0.0012829999999999999,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        }
+      ]
+    },
+    {
+      "variant": "rust-simd",
+      "backend": "rust-commp-simd: reduce neon_sha256_x4, extrude neon",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1048576,
+      "iters": 1,
+      "mibps": 761.2279215356708,
+      "cores": 1.0010147168194072,
+      "root": "405feeccc1e2ebb49d4fa83367c71a32bd7cd011f0f77184efc2cd2ef1361a23",
+      "padded": 2097152,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 131584,
+      "allocs": 1,
+      "runs": [
+        {
+          "wall": 0.001313667,
+          "user": 0,
+          "sys": 0.0013150000000000002,
+          "allocBytes": 131584,
+          "allocs": 1
+        }
+      ]
+    },
+    {
+      "variant": "rust-par",
+      "backend": "ARMv8 SHA2, 4 messages interleaved, 4 threads",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1048576,
+      "iters": 1,
+      "mibps": 809.8654570516201,
+      "cores": 1.0925085015626355,
+      "root": "405feeccc1e2ebb49d4fa83367c71a32bd7cd011f0f77184efc2cd2ef1361a23",
+      "padded": 2097152,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 16432,
+      "allocs": 2,
+      "runs": [
+        {
+          "wall": 0.001234773,
+          "user": 0,
+          "sys": 0.001349,
+          "allocBytes": 16432,
+          "allocs": 2
+        }
+      ]
+    },
+    {
+      "variant": "go",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 1048576,
+      "iters": 1,
+      "mibps": 1201.0468324191365,
+      "cores": 1.8279932789419262,
+      "root": "405feeccc1e2ebb49d4fa83367c71a32bd7cd011f0f77184efc2cd2ef1361a23",
+      "padded": 2097152,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 1389648,
+      "allocs": 235,
+      "runs": [
+        {
+          "wall": 0.000832607,
+          "user": 0,
+          "sys": 0.0015220000000000003,
+          "allocBytes": 1389648,
+          "allocs": 235
+        }
+      ]
+    },
+    {
+      "variant": "go-1core",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 1048576,
+      "iters": 1,
+      "mibps": 786.8916442336974,
+      "cores": 1.0221722458595732,
+      "root": "405feeccc1e2ebb49d4fa83367c71a32bd7cd011f0f77184efc2cd2ef1361a23",
+      "padded": 2097152,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 1382368,
+      "allocs": 207,
+      "runs": [
+        {
+          "wall": 0.001270823,
+          "user": 0,
+          "sys": 0.0012990000000000002,
+          "allocBytes": 1382368,
+          "allocs": 207
+        }
+      ]
+    },
+    {
+      "variant": "wasm",
+      "backend": "wasm simd128, 4 messages per SHA-256",
+      "runtime": "node v24.21.0 (V8 13.6.233.17-node.53)",
+      "size": 1048576,
+      "iters": 1,
+      "mibps": 117.49522734386531,
+      "cores": 1.1219619259065698,
+      "root": "405feeccc1e2ebb49d4fa83367c71a32bd7cd011f0f77184efc2cd2ef1361a23",
+      "padded": 2097152,
+      "rssBase": 59383808,
+      "rssPeak": 59850752,
+      "allocBytes": null,
+      "allocs": null,
+      "runs": [
+        {
+          "wall": 0.008510984,
+          "user": 0.005989,
+          "sys": 0.00356,
+          "allocBytes": null,
+          "allocs": null
+        }
+      ]
+    },
+    {
+      "variant": "rust",
+      "backend": "ARMv8 SHA2, 4 messages interleaved",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1073741824,
+      "iters": 1,
+      "mibps": 784.9668755285422,
+      "cores": 1.000024035777717,
+      "root": "8a2f5e40e4d2b7d8219a4e1655ed8bd91b8a286ebfc8da9529cd9f0698c0ab11",
+      "padded": 2147483648,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 16432,
+      "allocs": 2,
+      "runs": [
+        {
+          "wall": 1.304513645,
+          "user": 1.304545,
+          "sys": 0,
+          "allocBytes": 16432,
+          "allocs": 2
+        }
+      ]
+    },
+    {
+      "variant": "rust-simd",
+      "backend": "rust-commp-simd: reduce neon_sha256_x4, extrude neon",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1073741824,
+      "iters": 1,
+      "mibps": 875.8493966493324,
+      "cores": 1.0000181550579035,
+      "root": "8a2f5e40e4d2b7d8219a4e1655ed8bd91b8a286ebfc8da9529cd9f0698c0ab11",
+      "padded": 2147483648,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 131584,
+      "allocs": 1,
+      "runs": [
+        {
+          "wall": 1.169150774,
+          "user": 1.1685549999999998,
+          "sys": 0.0006169999999999995,
+          "allocBytes": 131584,
+          "allocs": 1
+        }
+      ]
+    },
+    {
+      "variant": "rust-par",
+      "backend": "ARMv8 SHA2, 4 messages interleaved, 4 threads",
+      "runtime": "rustc 1.94.1 (e408947bf 2026-03-25)",
+      "size": 1073741824,
+      "iters": 1,
+      "mibps": 802.6746977112979,
+      "cores": 1.0536908290082598,
+      "root": "8a2f5e40e4d2b7d8219a4e1655ed8bd91b8a286ebfc8da9529cd9f0698c0ab11",
+      "padded": 2147483648,
+      "rssBase": 8503296,
+      "rssPeak": 8503296,
+      "allocBytes": 31632,
+      "allocs": 12,
+      "runs": [
+        {
+          "wall": 1.275734744,
+          "user": 1.320677,
+          "sys": 0.023553,
+          "allocBytes": 31632,
+          "allocs": 12
+        }
+      ]
+    },
+    {
+      "variant": "go",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 1073741824,
+      "iters": 1,
+      "mibps": 1531.085272924069,
+      "cores": 2.3763041515966283,
+      "root": "8a2f5e40e4d2b7d8219a4e1655ed8bd91b8a286ebfc8da9529cd9f0698c0ab11",
+      "padded": 2147483648,
+      "rssBase": 10989568,
+      "rssPeak": 17362944,
+      "allocBytes": 1352838880,
+      "allocs": 33311,
+      "runs": [
+        {
+          "wall": 0.668806642,
+          "user": 1.4700119999999999,
+          "sys": 0.119276,
+          "allocBytes": 1352838880,
+          "allocs": 33311
+        }
+      ]
+    },
+    {
+      "variant": "go-1core",
+      "backend": "sha256-simd/ARMv8",
+      "runtime": "go1.25.0",
+      "size": 1073741824,
+      "iters": 1,
+      "mibps": 762.7146598867968,
+      "cores": 1.0002689932230622,
+      "root": "8a2f5e40e4d2b7d8219a4e1655ed8bd91b8a286ebfc8da9529cd9f0698c0ab11",
+      "padded": 2147483648,
+      "rssBase": 13213696,
+      "rssPeak": 34394112,
+      "allocBytes": 1352825312,
+      "allocs": 33219,
+      "runs": [
+        {
+          "wall": 1.342572857,
+          "user": 1.30285,
+          "sys": 0.040084,
+          "allocBytes": 1352825312,
+          "allocs": 33219
+        }
+      ]
+    },
+    {
+      "variant": "wasm",
+      "backend": "wasm simd128, 4 messages per SHA-256",
+      "runtime": "node v24.21.0 (V8 13.6.233.17-node.53)",
+      "size": 1073741824,
+      "iters": 1,
+      "mibps": 119.08122840084124,
+      "cores": 1.0012352009747976,
+      "root": "8a2f5e40e4d2b7d8219a4e1655ed8bd91b8a286ebfc8da9529cd9f0698c0ab11",
+      "padded": 2147483648,
+      "rssBase": 59564032,
+      "rssPeak": 61710336,
+      "allocBytes": null,
+      "allocs": null,
+      "runs": [
+        {
+          "wall": 8.599172294,
+          "user": 8.609794,
+          "sys": 0,
+          "allocBytes": null,
+          "allocs": null
+        }
+      ]
+    }
+  ]
+}
